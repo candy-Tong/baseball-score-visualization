@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://dimplejs.org/dist/dimple.v2.0.0.min.js"></script>
+
+    <style>
+        circle.dimple-series-1 {
+            fill: red;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        function draw(data) {
+            let margin = 75,
+                width = 1000 - margin,
+                height = 580 - margin;
+
+//            标题
+            d3.select("body")
+                .append("h2")
+                .text("球手自身特征与其平均表现的关系")
+
+            let svg = d3.select("body")
+                .append("svg")
+                .attr("width", width + margin)
+                .attr("height", height + margin)
+
+//            画点
+            svg.append('g')
+                .attr('class', 'chart');
+
+//            坐标轴
+            let height_extent = d3.extent(data, (d) => d['height'])
+            let weight_extent = d3.extent(data, (d) => d['weight'])
+            let avg_extent = d3.extent(data, (d) => d['avg'])
+
+            let height_scale = d3.scale.linear().domain(height_extent).range([height, margin])
+            let weight_scale = d3.scale.linear().domain(weight_extent).range([margin, width])
+            let avg_scale = d3.scale.sqrt().domain(avg_extent).range([2, 5])
+
+            let weight_axis = d3.svg.axis().scale(weight_scale)
+                .orient('bottom')
+            let height_axis = d3.svg.axis().scale(height_scale)
+                .orient('left')
+
+            svg.append('g')
+                .attr('class', 'x axis')
+                .attr('transform', 'translate(0,' + height + ')')
+                .call(weight_axis)
+            svg.append('g')
+                .attr('class', 'y axis')
+                .attr('transform', 'translate(' + margin + ',0)')
+                .call(height_axis)
+
+//            坐标点
+            svg.append('g').attr('class', 'point')
+                .selectAll('circle').data(data, (d) => d['name']).enter()
+                .append('circle')
+                .attr('cx', (d) => weight_scale(d['weight']))
+                .attr('cy', (d) => height_scale(d['height']))
+                .attr('r', (d) => avg_scale(d['avg']))
+                .style('opacity', 0.25)
+                .attr('fill', function (d) {
+                    if (d['handedness'] === 'R') {
+                        return '#1abc9c'
+                    } else if (d['handedness'] === 'L') {
+                        return '#3498db'
+                    } else {
+                        return '#e67e22'
+                    }
+                })
+
+//            图例
+            let legend = svg.append('g')
+                .attr('class', 'legend').attr('transform', 'translate(' + width + ',' + margin + ')')
+                .selectAll('g')
+                .data(['R', 'L', 'B']).enter()
+                .append('g')
+            legend.append('circle').attr('r', 5).attr('fill', function (d, index) {
+                let color_list = ['#1abc9c', '#3498db', '#e67e22']
+                return color_list[index]
+            }).attr('cy', (d, i) => 25 * i)
+
+            legend.append('text').attr('y', (d, i) => 25* i+6).attr('x', 15)
+                .text((d) => d)
+        }
+
+
+    </script>
+</head>
+<body>
+<script type="text/javascript">
+    /*
+      Use D3 (not dimple.js) to load the TSV file
+      and pass the contents of it to the draw function
+      */
+
+    d3.csv("baseball_data.csv", draw);
+</script>
+</body>
+</html>
