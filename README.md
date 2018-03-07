@@ -6,6 +6,7 @@
 
 # 概要
 该图表为棒球球手自身特征与其变现的关系图，展现了棒球球手身高、体重、左右手跟其全垒得分的关系
++ [预览地址][3]
 
 # 设计
 ## 反馈前
@@ -29,3 +30,4 @@
 
   [1]: https://github.com/d3/d3/wiki/API--%E4%B8%AD%E6%96%87%E6%89%8B%E5%86%8C
   [2]: https://flatuicolors.com/palette/defo
+  [3]: http://candycute.cn/baseball/baseball-final.html
