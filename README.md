@@ -1,6 +1,5 @@
 # 数据可视化-棒球分析 [![](https://img.shields.io/badge/D3-v3.5.17-orange.svg)](https://github.com/d3/d3/wiki/API--%E4%B8%AD%E6%96%87%E6%89%8B%E5%86%8C)
 
----
 # 概要
 该图表为棒球球手自身特征与其变现的关系图，展现了棒球球手身高、体重、左右手跟其全垒得分的关系
 
