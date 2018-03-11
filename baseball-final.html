@@ -25,6 +25,16 @@
         h2 {
             text-align: center;
         }
+
+        .R{
+            fill:#3498db ;
+        }
+        .L{
+            fill: #e74c3c;
+        }
+        .B{
+            fill: #e67e22;
+        }
     </style>
 
     <script>
@@ -33,7 +43,7 @@
                 width = 1000 - margin,
                 height = 580 - margin;
 
-//            标题
+            // 标题
             d3.select("body")
                 .append("h2")
                 .text("棒球球手自身特征与其全垒得分的关系")
@@ -43,11 +53,11 @@
                 .attr("width", width + margin)
                 .attr("height", height + margin)
 
-//            画点
+            // 画点
             svg.append('g')
                 .attr('class', 'chart');
 
-//            坐标轴
+            // 坐标轴
             let height_extent = d3.extent(data, (d) => d['height'])
             let weight_extent = d3.extent(data, (d) => d['weight'])
             let avg_extent = d3.extent(data, (d) => d['avg'])
@@ -82,21 +92,24 @@
                 .append('text')
                 .text('身高/英寸')
 
-//            坐标点
+            // 坐标点
             svg.append('g').attr('class', 'point')
                 .selectAll('circle').data(data, (d) => d['name']).enter()
                 .append('circle')
                 .attr('cx', (d) => weight_scale(d['weight']))
                 .attr('cy', (d) => height_scale(d['height']))
                 .attr('r', (d) => HR_scale(d['HR']))
+                .attr('class',function (d) {
+                    return d['handedness']
+                })
                 .style('opacity', 0.25)
 
 
             let updata = function (hand) {
                 let filtered_data
-                if(hand==='ALL'){
-                    filtered_data=data
-                }else{
+                if (hand === 'ALL') {
+                    filtered_data = data
+                } else {
                     filtered_data = data.filter((d) => d['handedness'] === hand);
                 }
 
@@ -105,11 +118,14 @@
                     .attr('cx', (d) => weight_scale(d['weight']))
                     .attr('cy', (d) => height_scale(d['height']))
                     .attr('r', (d) => HR_scale(d['HR']))
-                    .style('opacity', 0.25)
+                    .attr('class',function (d) {
+                        return d['handedness']
+                    })
+                    .style('opacity', 0.4)
             }
 
-//            按钮
-            let handedness = ['ALL','R', 'L', 'B']
+            // 按钮
+            let handedness = ['ALL', 'R', 'L', 'B']
             let buttons = d3.select('body').append('div').attr('class', 'button')
                 .selectAll('div').data(handedness).enter()
                 .append('div')
